@@ -1,0 +1,43 @@
+name: Solar Sytem Workflow
+
+on:
+    workflow_dispatch:
+    push:
+        branches:
+            - main
+            - 'feature/*'
+
+env:
+    MONGO_URI: 'mongodb+srv://supercluster.d83jj.mongodb.net/superData'
+    MONGO_USERNAME: ${{vars.MONGO_USERNAME}}
+    MONGO_PASSWORD: ${{secrets.MONGO_PASSWORD}}
+
+
+jobs:
+    unit_testing:
+        name: Unit Testing
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v2
+
+            - name: set up nodejs version
+              uses: actions/setup-node@v3
+              with:
+                  node-version: '18' # this options are avalable in the setup-node action github repo
+
+            - name: Install Dependencies
+              run: npm install
+
+            - name: Run unit test
+              run: npm test
+
+              # Archive test results
+              # after npm test is run, the test-results.xml file is generated
+              # this file is archived and can be viewed in the actions tab
+            - name: Archive test Results
+              uses: actions/upload-artifact@v3
+              with:
+                  name: Mocha-Test-Result  
+                  path: test-results.xml
