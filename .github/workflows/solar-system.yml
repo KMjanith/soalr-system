@@ -32,3 +32,12 @@ jobs:
 
             - name: Run unit test
               run: npm test
+
+              # Archive test results
+              # after npm test is run, the test-results.xml file is generated
+              # this file is archived and can be viewed in the actions tab
+            - name: Archive test Results
+              uses: actions/upload-artifact@v3
+              with:
+                  name: Mocha-Test-Result  
+                  path: test-results.xml
